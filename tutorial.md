@@ -44,3 +44,20 @@
     "json:server": "json-server --watch db.json"//to run json-server package in watch mode
   },
 ```
+
+```json
+"json:server": "json-server --watch db.json"
+
+/* 
+
+http://localhost:3000/companies/2
+
+{
+    id: "2",
+    name: "Phizer",
+    description: "Pharmacy",
+}
+
+*/
+
+```
