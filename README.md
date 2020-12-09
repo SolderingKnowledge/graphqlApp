@@ -15,9 +15,10 @@
 ```js
 //GraphQL query => request for user with id=23 and fields of that user: [id, firstName, age]
 {
-    user(id : "23"){
+    user(id : "10"){
         id,
         firstName,
+        lastName,
         age
     }
 }
@@ -28,6 +29,7 @@
     "user": {
       "id": "23",
       "firstName": "Bill",
+      "lastName": "Gates",
       "age": 20
     }
   }

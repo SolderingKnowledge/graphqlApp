@@ -1,11 +1,12 @@
 {
     "users":[
-        { "id":"23", "firstName": "Bill", "age": 20, "companyId": "1" },
-        { "id":"40", "firstName": "Alex", "age": 40, "companyId": "2"},
-        { "id":"40", "firstName": "Jennifer", "age": 40, "companyId": "2"}
+        { "id":"10", "firstName": "Bill", "lastName": "Gates", "age": 20, "companyId": "1" },
+        { "id":"20", "firstName": "Alex", "lastName": "Someone", "age": 40, "companyId": "2"},
+        { "id":"30", "firstName": "Jennifer", "lastName": "Red", "age": 35, "companyId": "3"}
     ],
     "companies":[
         { "id":"1", "name": "Microsoft", "description": "Software"},
-        { "id":"2", "name": "Phizer", "description": "Pharmacy"}
+        { "id":"2", "name": "Phizer", "description": "Pharmacy"},
+        { "id":"3", "name": "Dove", "description": "Beauty"}
     ]
 }
