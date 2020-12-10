@@ -54,6 +54,7 @@ const {
     GraphQLInt,
     GraphQLSchema,// takes in the root query and returns the graphQL instance
     GraphQLList,
+    GraphQLNonNull,
 } = graphql;
 
 const CompanyType = new GraphQLObjectType({
@@ -91,7 +92,7 @@ const UserType = new GraphQLObjectType({
         company: {
             type: CompanyType,// able to go to companies from here
             resolve(parentValue, args){
-                console.log(parentValue, args);
+                // console.log(parentValue, args);
                 // localhost:3000 there is a command `npm run json:server` is the npm package
                 return axios.get(`http://localhost:3000/companies/${parentValue.companyId}`).then(res => res.data);
             }
@@ -161,6 +162,46 @@ const RootQuery = new GraphQLObjectType({
     }
 })
 
+const mutation = new GraphQLObjectType({
+    name: "Mutation",
+    fields: {
+        addUser: {//add user
+            type: UserType,// type of the data
+            args: {
+                firstName: { type: new GraphQLNonNull(GraphQLString) },// required field
+                age: { type: new GraphQLNonNull(GraphQLInt) },// required field
+                companyId: { type: GraphQLString }// optional
+            },
+            resolve(parentValue, args){
+                return axios.post(`http://localhost:3000/users`, { firstName: args.firstName, age: args.age }).then(res => res.data);
+            }
+        },
+        deleteUser: {// delete user
+            type: UserType,// what type to expect for return
+            args: {
+                id: { type: new GraphQLNonNull(GraphQLString) }// required
+            },
+            resolve(parentValue, args){
+                return axios.delete(`http://localhost:3000/users/${args.id}`).then(res => res.data);
+            }
+        },
+        editUser: {// use PATCH request to update with provided data, not PUT because PUT replaces completely
+            type: UserType,// what type to expect for return
+            args: {
+                id: { type: new GraphQLNonNull(GraphQLString) },// required field is only id
+                firstName: { type: GraphQLString },// optional
+                age: { type: GraphQLInt },// optional
+                companyId: { type: GraphQLString },
+
+            },
+            resolve(parentValue, args){
+                return axios.patch(`http://localhost:3000/users/${args.id}`, args).then(res => res.data);// if in the args different ID is included then JSON server will just ignore it
+            }
+        }
+    }
+});
+
 module.exports= new GraphQLSchema({
-    query:RootQuery
+    query:RootQuery,
+    mutation
 })
