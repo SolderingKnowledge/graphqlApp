@@ -52,27 +52,44 @@ const {
     GraphQLObjectType, 
     GraphQLString,
     GraphQLInt,
-    GraphQLSchema// takes in the root query and returns the graphQL instance
+    GraphQLSchema,// takes in the root query and returns the graphQL instance
+    GraphQLList,
 } = graphql;
 
 const CompanyType = new GraphQLObjectType({
     name: "Company",
-    fields: {
+    fields: () => ({ // wrapping to function solves circular error where it complains for using before definition; closure!
         id:{type:GraphQLString},// type string
         name:{type:GraphQLString},// type string
-        description:{type:GraphQLString}// type string
-    }
+        description:{type:GraphQLString},// type string
+        users: {
+            type: new GraphQLList(UserType),// able to go to users from here; multiple users will be associated to the company
+            resolve(parentValue, args){
+                return axios.get(`http://localhost:3000/companies/${parentValue.id}/users`).then( res => {
+                    // console.log("res is here", res);
+                    return res.data
+                });
+                // return async () => {
+                //     const res = await axios.get(`http://localhost:3000/companies/${parentValue.id}/users`);
+                //     console.log("aikol", res);
+                //     const json = await res.json();
+                //     console.log("json is here", json);
+                //     return json.data;
+                // }
+            }
+        }
+    })
 })
 
 const UserType = new GraphQLObjectType({
     name:'User',//always going to string, giving a name
-    fields: {
+    fields: () => ({
         id:{type:GraphQLString},// type string
         firstName:{type:GraphQLString},// type string
         lastName:{type:GraphQLString},// type string
         age:{type:GraphQLInt},// type integer
         company: {
-            type: CompanyType,
+            type: CompanyType,// able to go to companies from here
             resolve(parentValue, args){
                 console.log(parentValue, args);
                 // localhost:3000 there is a command `npm run json:server` is the npm package
@@ -80,7 +97,7 @@ const UserType = new GraphQLObjectType({
             }
         }// making connection to company something like foreignKey
 
-    }
+    })
 });
 
 const RootQuery = new GraphQLObjectType({
