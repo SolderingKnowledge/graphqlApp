@@ -1,1 +1,16 @@
-/node_modules
+# ignore node_modules doesn't matter if it is in client or in server on this level folder
+node_modules/
+.DS_Store
+
+# all secret keys will be in this file for reference
+secret.js
+
+# ignore from now on the content of .env file will be ignored because i will be inserting sensetive informations
+# However once I created and added to git and afterwards including in .gitignore file will not make differences to not push it will push anyway
+# So, don't include at all from the begining 1) insert in .gitignore then 2) create .env file otherwise it just gets included
+# Or run 1) git rm -r --cached . 2) git add . 3) git commit -m <commitMessage> 4) git push
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
